@@ -1,0 +1,9 @@
+.CardDeck {
+  background-color: green;
+  min-height: 500px;
+  min-width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
