@@ -7,7 +7,6 @@ import { v4 as uuid } from "uuid";
 const CardDeck = () => {
   const [cards, setCards] = useState([]);
   const [drawCard, setDrawCard] = useState(false);
-  const [cardsRemaining, setCardsRemaining] = useState(true);
   const [cardsShuffled, setCardsShuffle] = useState(false);
   const [buttonText, setButtonText] = useState("Start Drawing!");
   const timerId = useRef();
@@ -17,13 +16,12 @@ const CardDeck = () => {
       shuffleCard();
     }
     if (drawCard) {
-      if (cardsRemaining) {
-        timerId.current = setInterval(() => {
-          getCard();
-        }, 300);
-      }
+      timerId.current = setInterval(() => {
+        getCard();
+      }, 500);
+      return () => clearInterval(timerId.current);
     }
-  }, [cardsShuffled, drawCard, cardsRemaining]);
+  }, [cardsShuffled, drawCard]);
 
   const shuffleCard = () => {
     axios
@@ -46,16 +44,14 @@ const CardDeck = () => {
           }
         });
       });
-    setDrawCard(false);
   };
   const endGame = () => {
-    setCardsRemaining(false);
     pauseDraws(true);
     setButtonText("Game Over");
-    alert("Error: No more cards");
   };
 
   const pauseDraws = (endGame) => {
+    setDrawCard(false);
     clearInterval(timerId.current);
     timerId.current = undefined;
     if (!endGame) {
